@@ -1,0 +1,16 @@
+type Query {
+    #El argumento lo damos nosotros en el GraphQL playground
+    hello(name: String): String! #Así es como se hace una query con argumentos
+    quantity: Int!
+    #getUser: User! #Este es un tipo custom
+    user(id: ID): [User!]! #Me va a regresar un array no nulo de usuarios no nulos
+}
+#Los tipos de datos que hay son escalares y custom
+#Los escalares son: Int, Float, String, Boolean y ID
+
+#Aquí se definen los tipos custom
+type User {
+    id: ID!
+    name: String!
+    lastName: String!
+}
