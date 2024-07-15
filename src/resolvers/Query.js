@@ -6,16 +6,16 @@ const Query = {
     //Queries root no tienen parent
     //Contexto permite guardar información global que luego puede ser accedida desde 
     //cualquier resolver
-    //Info es metadata, es decir, te va a decir qué estas ejecutando (query, mutation, etc), 
-    //cómo se llama, etc
+    //Info es metadata, es decir, te va a decir qué estas ejecutando (query, mutation, etc)
+    //Tipo (query, mutation, etc), nombre de la query, etc
     //hello: () => "Hola Mundo",
     hello: (parent, args, ctx, info) => {
         const { name } = args
 
-        return `Hello ${name || world}`
+        return `Hello ${name || 'world'}`
     },
     quantity: () => 1,
-    //getUser: () => { return {name: "Josh", lastName: "Ospina"} }
+    //getUser: () => ({name: "Josh", lastName: "Ospina"}),
     user: (parent, { id }, ctx, info) => { 
         const { db } = ctx
 
@@ -24,6 +24,20 @@ const Query = {
         } 
 
         return db.users.filter((user) => user.id === id)
+    },
+    author: (parent, { id }, { db }, info) => {
+        if(!id) {
+            return db.authors
+        }
+
+        return db.authors.filter(author => author.id === id) 
+    },
+    book: (parent, { id }, { db }, info) => {
+        if(!id) {
+            return db.books
+        }
+
+        return db.books.filter(book => book.id === id)
     }
 }
 

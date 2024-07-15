@@ -1,6 +1,8 @@
 //Permite crear y levantar el servidor de manera rápida 
 import { GraphQLServer } from 'graphql-yoga'
 import Query from './resolvers/Query'
+import Author from './resolvers/Author'
+import Book from './resolvers/Book'
 import db from './db'
 
 //Schema definition directly on JS file
@@ -18,7 +20,9 @@ import db from './db'
     }
 }*/
 const resolvers = {
-    Query
+    Query,
+    Author,
+    Book
 }
 
 //Para no tener que hacer un import en cada resolver hay que agregar la BD al contexto
