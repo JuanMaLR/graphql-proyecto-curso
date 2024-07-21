@@ -1,8 +1,10 @@
 //Permite crear y levantar el servidor de manera rápida 
-import { GraphQLServer } from 'graphql-yoga'
+import { GraphQLServer, PubSub } from 'graphql-yoga'
 import Query from './resolvers/Query'
 import Author from './resolvers/Author'
 import Book from './resolvers/Book'
+import Mutation from './resolvers/Mutation'
+import Subscription from './resolvers/Subscription'
 import db from './db'
 
 //Schema definition directly on JS file
@@ -19,14 +21,22 @@ import db from './db'
         hello: () => 'Hello world'
     }
 }*/
+
+const pubsub = new PubSub()
+
 const resolvers = {
     Query,
     Author,
-    Book
+    Book,
+    Mutation,
+    Subscription
 }
 
 //Para no tener que hacer un import en cada resolver hay que agregar la BD al contexto
-const context = { db }
+const context = { 
+    db, 
+    pubsub
+}
 
 //Asociar schemas y resolvers con el servidor
 //Puedo poner typeDefs: typeDefs o sólo poner typeDefs una vez gracias a ES6
