@@ -1,5 +1,3 @@
-import { subscribe } from "diagnostics_channel"
-
 const Subscription = {
     count: {
         subscribe: (parent, args, { pubsub }, info) => {
