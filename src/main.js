@@ -6,6 +6,7 @@ import Book from './resolvers/Book'
 import Mutation from './resolvers/Mutation'
 import Subscription from './resolvers/Subscription'
 import db from './db'
+import { PrismaClient } from '@prisma/client'
 
 //Schema definition directly on JS file
 //! es para que a fuerzas regrese un valor (es decir, algo no nulo)
@@ -22,6 +23,8 @@ import db from './db'
     }
 }*/
 
+const prisma = new PrismaClient()
+
 const pubsub = new PubSub()
 
 const resolvers = {
@@ -35,7 +38,8 @@ const resolvers = {
 //Para no tener que hacer un import en cada resolver hay que agregar la BD al contexto
 const context = { 
     db, 
-    pubsub
+    pubsub,
+    prisma
 }
 
 //Asociar schemas y resolvers con el servidor

@@ -15,7 +15,7 @@ type Query {
 type User {
     id: ID!
     name: String!
-    lastName: String!
+    lastname: String!
     email: String!
 }
 
@@ -71,16 +71,14 @@ type BookSubscriptionPayload {
 
 input createUserInput {
     name: String!
-    lastName: String!
+    lastname: String!
     email: String!
-    password: String!
 }
 
 input updateUserInput {
     name: String
-    lastName: String
+    lastname: String
     email: String
-    password: String
 }
 
 input createAuthorInput {
