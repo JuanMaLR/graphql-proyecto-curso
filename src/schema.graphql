@@ -38,7 +38,7 @@ type Book {
 }
 
 type Mutation {
-    createUser(data: createUserInput): User!
+    signUp(data: signUpInput!): AuthPayload!
     updateUser(id: ID!, data: updateUserInput): User!
     createAuthor(data: createAuthorInput): Author!
     updateAuthor(id: ID!, data: updateAuthorInput): Author!
@@ -69,10 +69,16 @@ type BookSubscriptionPayload {
     data: Book!
 }
 
-input createUserInput {
+input signUpInput {
     name: String!
     lastname: String!
     email: String!
+    password: String!
+}
+
+type AuthPayload {
+    user: User!
+    token: String!
 }
 
 input updateUserInput {

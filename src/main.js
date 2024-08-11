@@ -47,7 +47,13 @@ const context = {
 //Si voy a usar una definición de schema en un archivo aparte se debe escribir como
 //typeDefs: './src/schema.graphql'
 //Aquí se agrega el contexto 
-const server = new GraphQLServer({typeDefs: './src/schema.graphql', resolvers, context})
+const server = new GraphQLServer({typeDefs: './src/schema.graphql', resolvers, 
+    context: (request) => {
+        return {
+            ...request,
+            ...context
+        }
+    }})
 
 //Se levanta el servidor y se queda escuchando las peticiones 
 server.start(() => console.log("Server is running on localhost:4000")) //Port 4000 by default

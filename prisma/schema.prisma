@@ -33,6 +33,7 @@ model users {
   name     String    @db.VarChar
   lastname String    @db.VarChar
   email    String    @unique @db.VarChar
+  password String    @db.VarChar
   authors  authors[]
   books    books[]
 }

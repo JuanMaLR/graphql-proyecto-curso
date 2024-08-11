@@ -18,7 +18,9 @@
   "license": "ISC",
   "dependencies": {
     "@prisma/client": "^5.17.0",
+    "bcrypt": "^5.1.1",
     "graphql-yoga": "^1.18.3",
+    "jsonwebtoken": "^9.0.2",
     "uuid": "^10.0.0"
   },
   "devDependencies": {

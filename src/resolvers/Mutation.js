@@ -1,5 +1,7 @@
+import { generateToken, hashPassword } from '../utils'
+
 const Mutation = {
-    createUser: (parent, { data }, { /* db */ prisma }, info) => {
+    signUp: async (parent, { data }, { /* db */ prisma }, info) => {
         /* const isEmailTaken = db.users.some(user => user.email === data.email)
 
         if(isEmailTaken) {
@@ -14,9 +16,22 @@ const Mutation = {
         db.users.push(user)
 
         return user */
-        return prisma.users.create({
+        /* return prisma.users.create({
             data
+        }) */
+        const password = hashPassword(data.password)
+
+        const user = await prisma.users.create({
+            data: {
+                ...data,
+                password
+            }
         })
+
+        return {
+            user,
+            token: generateToken(user.id)
+        }
     },
     updateUser: (parent, { id, data }, { prisma }, info) => {
         /* const userExist = db.users.find(user => user.id === id)
@@ -108,10 +123,10 @@ const Mutation = {
         } })
 
         return authorUpdated */
-        const { register_by } = data
+        const { register_by, ...rest } = data
 
         if (register_by) {
-            data.users = {
+            rest.users = {
                 connect: {
                     id: Number(register_by)
                 }
@@ -122,7 +137,9 @@ const Mutation = {
             where: {
                 id: Number(id)
             },
-            data
+            data: {
+                ...rest
+            }
         })
 
         pubsub.publish('author', { author: {
@@ -214,10 +231,10 @@ const Mutation = {
 
         return bookUpdated */
 
-        const { register_by, writted_by } = data
+        const { register_by, writted_by, ...rest } = data
 
         if(register_by) {
-            data.users = {
+            rest.users = {
                 connect: {
                     id: Number(register_by)
                 }
@@ -225,7 +242,7 @@ const Mutation = {
         }
 
         if(writted_by) {
-            data.authors = {
+            rest.authors = {
                 connect: {
                     id: Number(writted_by)
                 }
@@ -236,7 +253,9 @@ const Mutation = {
             where: {
                 id: Number(id)
             },
-            data
+            data: {
+                ...rest
+            }
         })
 
         pubsub.publish(`book - ${bookUpdated.writted_by}`, {
