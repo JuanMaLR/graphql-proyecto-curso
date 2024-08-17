@@ -39,6 +39,7 @@ type Book {
 
 type Mutation {
     signUp(data: signUpInput!): AuthPayload!
+    login(data: loginInput!): AuthPayload!
     updateUser(id: ID!, data: updateUserInput): User!
     createAuthor(data: createAuthorInput): Author!
     updateAuthor(id: ID!, data: updateAuthorInput): Author!
@@ -76,6 +77,11 @@ input signUpInput {
     password: String!
 }
 
+input loginInput {
+    email: String!
+    password: String!
+}
+
 type AuthPayload {
     user: User!
     token: String!
@@ -85,6 +91,7 @@ input updateUserInput {
     name: String
     lastname: String
     email: String
+    password: String
 }
 
 input createAuthorInput {

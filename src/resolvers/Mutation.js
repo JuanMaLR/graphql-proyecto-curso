@@ -1,4 +1,4 @@
-import { generateToken, hashPassword } from '../utils'
+import { generateToken, getUserId, hashPassword, validatePassword } from '../utils'
 
 const Mutation = {
     signUp: async (parent, { data }, { /* db */ prisma }, info) => {
@@ -33,7 +33,25 @@ const Mutation = {
             token: generateToken(user.id)
         }
     },
-    updateUser: (parent, { id, data }, { prisma }, info) => {
+    login: async (parent, { data }, { prisma }, info) => {
+        const user = await prisma.users.findUnique({
+            where: {
+                email: data.email
+            }
+        })
+
+        const isPasswordCorrect = validatePassword(data.password, user.password)
+
+        if (!isPasswordCorrect) {
+            throw new Error("Incorrect username or password")
+        }
+
+        return {
+            user,
+            token: generateToken(user.id)
+        }
+    },
+    updateUser: (parent, { id, data }, { request, prisma }, info) => {
         /* const userExist = db.users.find(user => user.id === id)
 
         if (!userExist) {
@@ -57,6 +75,13 @@ const Mutation = {
         })
 
         return { ...userExist, ...data } */
+        const userId = getUserId(request)
+
+        const { password } = data
+
+        if(password) {
+            data.password = hashPassword(data.password)
+        }
 
         return prisma.users.update({
             where: {
@@ -65,7 +90,7 @@ const Mutation = {
             data
         })
     },
-    createAuthor: async (parent, { data }, { /* db, */ pubsub, prisma }, info) => {
+    createAuthor: async (parent, { data }, { /* db, */ request, pubsub, prisma }, info) => {
         /* const author = {
             id: uuidv4(),
             ...data
@@ -81,6 +106,8 @@ const Mutation = {
         } })
 
         return author */
+        const userId = getUserId(request)
+
         const { register_by, ...rest } = data
 
         const newAuthor = await prisma.authors.create({
@@ -101,7 +128,7 @@ const Mutation = {
 
        return newAuthor
     },
-    updateAuthor: async (parent, { id, data }, { prisma, pubsub }, info) => {
+    updateAuthor: async (parent, { id, data }, { request, prisma, pubsub }, info) => {
         /* const authorExist = db.authors.find(author => author.id === id)
 
         if(!authorExist) {
@@ -123,6 +150,8 @@ const Mutation = {
         } })
 
         return authorUpdated */
+        const userId = getUserId(request)
+
         const { register_by, ...rest } = data
 
         if (register_by) {
@@ -149,7 +178,7 @@ const Mutation = {
 
         return authorUpdated 
     },
-    createBook: async (parent, { data }, { prisma, pubsub }, info) => {
+    createBook: async (parent, { data }, { request, prisma, pubsub }, info) => {
        /*  const isAuthorExist = db.authors.some(author => author.id === data.writted_by)
         
         if(!isAuthorExist) {
@@ -171,6 +200,7 @@ const Mutation = {
         })
 
         return book */
+        const userId = getUserId(request)
 
         const { register_by, writted_by, ...rest } = data
 
@@ -199,7 +229,7 @@ const Mutation = {
 
         return newBook
     },
-    updateBook: async (parent, { id, data }, { prisma, pubsub }, info) => {
+    updateBook: async (parent, { id, data }, { request, prisma, pubsub }, info) => {
         /* const bookExist = db.books.find(book => book.id === id)
 
         if(!bookExist) {
@@ -230,6 +260,7 @@ const Mutation = {
         })
 
         return bookUpdated */
+        const userId = getUserId(request)
 
         const { register_by, writted_by, ...rest } = data
 
@@ -267,7 +298,7 @@ const Mutation = {
 
         return bookUpdated
     },
-    deleteBook: async (parent, { id }, { prisma, pubsub }, info) => {
+    deleteBook: async (parent, { id }, { request, prisma, pubsub }, info) => {
         /* const bookExist = db.books.find(book => book.id === id)
 
         if(!bookExist) {
@@ -289,6 +320,7 @@ const Mutation = {
         })
 
         return bookExist */
+        const userId = getUserId(request)
 
         const bookDeleted = await prisma.books.delete({
             where: {

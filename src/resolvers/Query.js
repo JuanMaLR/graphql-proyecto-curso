@@ -1,3 +1,5 @@
+import { getUserId } from "../utils"
+
 //Resolvers de tipo query
 const Query = {
     //Resolvers reciben 4 parámetros
@@ -16,8 +18,10 @@ const Query = {
     },
     quantity: () => 1,
     //getUser: () => ({name: "Josh", lastName: "Ospina"}),
-    user: (parent, { id }, { prisma }, info) => { 
+    user: (parent, { id }, { request, prisma }, info) => { 
         //const { db } = ctx
+
+        const userId = getUserId(request)
 
         if(!id){ //Si no recibo un id
             //return db.users //Regreso todos
@@ -31,7 +35,9 @@ const Query = {
             }
         })
     },
-    author: (parent, { id }, { prisma }, info) => {
+    author: (parent, { id }, { request, prisma }, info) => {
+        const userId = getUserId(request)
+
         if(!id) {
             //return db.authors
             return prisma.authors.findMany()
@@ -44,7 +50,9 @@ const Query = {
             }
         })
     },
-    book: (parent, { id }, { /* db */ prisma }, info) => {
+    book: (parent, { id }, { /* db */ request, prisma }, info) => {
+        const userId = getUserId(request)
+
         if(!id) {
             //return db.books
             return prisma.books.findMany()

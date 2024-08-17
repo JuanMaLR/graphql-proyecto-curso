@@ -1,5 +1,8 @@
+import { getUserId } from "../utils"
+
 const Author = {
-    register_by: (parent, args, { /* db */ prisma }, info) => {
+    register_by: (parent, args, { /* db */ request, prisma }, info) => {
+        const userId = getUserId(request)
         //return db.users.find(user => user.id === parent.register_by)
         return prisma.users.findUnique({
             where: {
@@ -12,7 +15,8 @@ const Author = {
             }
         }).users() */
     },
-    books: (parent, args, { prisma }, info) => {
+    books: (parent, args, { request, prisma }, info) => {
+        const userId = getUserId(request)
         //return db.books.filter(book => book.writted_by === parent.id)
         return prisma.books.findMany({
             where: {

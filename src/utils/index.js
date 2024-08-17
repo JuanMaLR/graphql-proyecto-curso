@@ -3,8 +3,17 @@ import bcrypt from 'bcrypt'
 
 const SECRET = 'edteam'
 
-export const getUserId = () => {
-    return 'Hello World'
+export const getUserId = request => {
+    const header = request.get("authorization")
+
+    if(header) {
+        const token = header.replace('Bearer ', "")
+        const { userId } = jwt.verify(token, SECRET)
+
+        return userId
+    }
+
+    throw new Error("Authentication required")
 }
 
 export const hashPassword = password => {
