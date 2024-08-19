@@ -5,8 +5,8 @@ type Query {
     quantity: Int!
     #getUser: User! #Este es un tipo custom
     user(id: ID): [User!]! #Me va a regresar un array no nulo de usuarios no nulos
-    author(id: ID): [Author!]! 
-    book(id: ID): [Book!]!
+    author(id: ID, quantity: Int, skip: Int, orderBy: AuthorOrderByInput): [Author!]! 
+    book(id: ID, quantity: Int, skip: Int, orderBy: BookOrderByInput): [Book!]!
 }
 #Los tipos de datos que hay son escalares y custom
 #Los escalares son: Int, Float, String, Boolean y ID
@@ -68,6 +68,25 @@ type AuthorSubscriptionPayload {
 type BookSubscriptionPayload {
     mutation: MutationType!
     data: Book!
+}
+
+input AuthorOrderByInput {
+    id: OrderByArg
+    name: OrderByArg
+    country: OrderByArg
+}
+
+input BookOrderByInput {
+    id: OrderByArg
+    title: OrderByArg
+    description: OrderByArg
+    quantity: OrderByArg
+    price: OrderByArg
+}
+
+enum OrderByArg {
+    asc,
+    desc
 }
 
 input signUpInput {

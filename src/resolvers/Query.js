@@ -35,12 +35,16 @@ const Query = {
             }
         })
     },
-    author: (parent, { id }, { request, prisma }, info) => {
+    author: (parent, { id, quantity, skip, orderBy }, { request, prisma }, info) => {
         const userId = getUserId(request)
 
         if(!id) {
             //return db.authors
-            return prisma.authors.findMany()
+            return prisma.authors.findMany({
+                take: quantity,
+                skip,
+                orderBy
+            })
         }
 
         //return db.authors.filter(author => author.id === id) 
@@ -50,12 +54,16 @@ const Query = {
             }
         })
     },
-    book: (parent, { id }, { /* db */ request, prisma }, info) => {
+    book: (parent, { id, quantity, skip, orderBy }, { /* db */ request, prisma }, info) => {
         const userId = getUserId(request)
 
         if(!id) {
             //return db.books
-            return prisma.books.findMany()
+            return prisma.books.findMany({
+                take: quantity,
+                skip,
+                orderBy
+            })
         }
 
         //return db.books.filter(book => book.id === id)
