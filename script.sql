@@ -3,7 +3,7 @@ CREATE TABLE users (
     name VARCHAR,
     lastname VARCHAR,
     email VARCHAR UNIQUE NOT NULL
-)
+);
 
 CREATE TABLE authors (
     id SERIAL PRIMARY KEY NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE authors (
     country VARCHAR,
     register_by INTEGER,
     FOREIGN KEY (register_by) REFERENCES users (id)
-)
+);
 
 CREATE TABLE books (
     id SERIAL PRIMARY KEY NOT NULL,
@@ -23,6 +23,6 @@ CREATE TABLE books (
     register_by INTEGER,
     FOREIGN KEY (writted_by) REFERENCES authors (id),
     FOREIGN KEY (register_by) REFERENCES users (id)
-)
+);
 
-ALTER TABLE users ADD COLUMN password VARCHAR
+ALTER TABLE users ADD COLUMN password VARCHAR;
