@@ -56,4 +56,4 @@ const server = new GraphQLServer({typeDefs: './src/schema.graphql', resolvers,
     }})
 
 //Se levanta el servidor y se queda escuchando las peticiones 
-server.start(() => console.log("Server is running on localhost:4000")) //Port 4000 by default
+server.start({ port: 8000 }, ({ port }) => console.log(`Server is running on localhost:${port}`)) //Port 4000 by default
